@@ -1,0 +1,10 @@
+<resources>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="app_name">Infoshare</string>
+    <string name="content_title">Title</string>
+    <string name="date_created">date created</string>
+    <string name="creator">creator</string>
+    <string name="preview">review text</string>
+</resources>
