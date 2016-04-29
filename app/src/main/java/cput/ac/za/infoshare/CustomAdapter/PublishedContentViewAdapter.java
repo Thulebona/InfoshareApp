@@ -60,13 +60,13 @@ public class PublishedContentViewAdapter extends BaseAdapter
             view = inflater.inflate(R.layout.published_content_adapter, null);
         TextView cont_Title = (TextView) view.findViewById(R.id.cont_Title);
         TextView cont_creator = (TextView) view.findViewById(R.id.cont_creator);
-        TextView cont_preveiw = (TextView) view.findViewById(R.id.cont_preveiw);
+        TextView cont_preview = (TextView) view.findViewById(R.id.cont_preveiw);
         TextView cont_dateCreated = (TextView) view.findViewById(R.id.cont_dateCreated);
 
         SimpleDateFormat format = new SimpleDateFormat("dd-MMMM-yyyy");
         cont_Title.setText(item.getTitle().toUpperCase());
         cont_creator.setText(item.getCreator());
-        cont_preveiw.setText(item.getContent().substring(0,45));
+        cont_preview.setText(item.getContent().substring(0,45));
         cont_dateCreated.setText(format.format(item.getDateCreated()));
         if (position % 2 == 0) {
             view.setBackgroundColor(Color.parseColor("#dedcdc"));

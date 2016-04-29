@@ -1,9 +1,10 @@
-package infoshare.restapi.ContentFiles.Source;
+package cput.ac.za.infoshare.RestFulUtil.content.Source;
 
-import infoshare.app.conf.RestUtil;
-import infoshare.domain.content.Source;
 
 import java.util.Set;
+
+import cput.ac.za.infoshare.AppConf.RestUtil;
+import cput.ac.za.infoshare.domain.content.Source;
 
 /**
  * Created by user9 on 2016/02/23.
