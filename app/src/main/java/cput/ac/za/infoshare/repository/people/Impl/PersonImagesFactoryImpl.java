@@ -10,11 +10,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
 import cput.ac.za.infoshare.AppConf.databasese.DBConstants;
-import cput.ac.za.infoshare.domain.person.Person;
 import cput.ac.za.infoshare.domain.person.PersonImages;
 import cput.ac.za.infoshare.repository.people.PersonImagesFactory;
 
@@ -38,30 +38,24 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
 
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_org = "org";
-    public static final String COLUMN_firstName = "firstName";
-    public static final String COLUMN_emailAddress = "emailAddress";
-    public static final String COLUMN_lastName = "lastName";
-    public static final String COLUMN_authvalue = "authvalue";
-    public static final String COLUMN_enabled = "enabled";
-    public static final String COLUMN_accountNonExpired = "accountNonExpired";
-    public static final String COLUMN_credentialsNonExpired = "credentialsNonExpired";
-    public static final String COLUMN_accountNonLocked = "accountNonLocked";
-    public static final String COLUMN_state = "state";
+    public static final String COLUMN_personId = "personId";
+    public static final String COLUMN_url = "url";
+    public static final String COLUMN_description = "description";
+    public static final String COLUMN_mime = "mime";
+    public static final String COLUMN_size = "size";
+    public static final String COLUMN_date = "date";
 
     // Database creation sql statement
     private static final String DATABASE_CREATE = " CREATE TABLE "
             + TABLE_NAME + "("
             + COLUMN_ID + " TEXT  PRIMARY KEY , "
             + COLUMN_org + " TEXT  NOT NULL , "
-            + COLUMN_firstName + " TEXT NOT NULL , "
-            + COLUMN_emailAddress + " TEXT NOT NULL , "
-            + COLUMN_lastName + " TEXT NOT NULL , "
-            + COLUMN_authvalue + " TEXT NOT NULL , "
-            + COLUMN_enabled + " INTEGER NOT NULL , "
-            + COLUMN_accountNonExpired + " INTEGER NOT NULL , "
-            + COLUMN_credentialsNonExpired + " INTEGER NOT NULL , "
-            + COLUMN_accountNonLocked + " INTEGER NOT NULL , "
-            + COLUMN_state + " INTEGER  NOT NULL ;";
+            + COLUMN_personId + " TEXT NOT NULL , "
+            + COLUMN_url + " TEXT NOT NULL , "
+            + COLUMN_description + " TEXT NOT NULL , "
+            + COLUMN_mime + " TEXT NOT NULL , "
+            + COLUMN_size + " TEXT NOT NULL , "
+            + COLUMN_date + " TEXT NOT NULL;";
 
 
     public PersonImagesFactoryImpl(Context context) {
@@ -76,15 +70,12 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
                 new String[]{
                         COLUMN_ID,
                         COLUMN_org,
-                        COLUMN_firstName,
-                        COLUMN_emailAddress,
-                        COLUMN_lastName,
-                        COLUMN_authvalue,
-                        COLUMN_enabled,
-                        COLUMN_accountNonExpired,
-                        COLUMN_credentialsNonExpired,
-                        COLUMN_accountNonLocked,
-                        COLUMN_state},
+                        COLUMN_personId,
+                        COLUMN_url,
+                        COLUMN_description,
+                        COLUMN_mime,
+                        COLUMN_size,
+                        COLUMN_date},
                 COLUMN_ID + " =? ",
                 new String[]{String.valueOf(s)},
                 null,
@@ -92,18 +83,17 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
                 null,
                 null);
         if (cursor.moveToFirst()) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
             return new PersonImages.Builder()
                     .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
                     .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
-                    .firstName(cursor.getString(cursor.getColumnIndex(COLUMN_firstName)))
-                    .emailAddress(cursor.getString(cursor.getColumnIndex(COLUMN_emailAddress)))
-                    .lastName(cursor.getString(cursor.getColumnIndex(COLUMN_lastName)))
-                    .authvalue(cursor.getString(cursor.getColumnIndex(COLUMN_authvalue)))
-                    .enabled(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_enabled))))
-                    .accountNonExpired(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_accountNonExpired))))
-                    .credentialsNonExpired(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_credentialsNonExpired))))
-                    .accountNonLocked(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_accountNonLocked))))
-                    .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
+                    .personId(cursor.getString(cursor.getColumnIndex(COLUMN_personId)))
+                    .url(cursor.getString(cursor.getColumnIndex(COLUMN_url)))
+                    .description(cursor.getString(cursor.getColumnIndex(COLUMN_description)))
+                    .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
+                    .size(cursor.getString(cursor.getColumnIndex(COLUMN_size)))
+                    .date(dateFormat.parse(cursor.getString(cursor
+                            .getColumnIndex(COLUMN_date))))
                     .build();
         } else {
             return null;
@@ -111,21 +101,18 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
     }
 
     @Override
-    public PersonImages save(Person entity) {
+    public PersonImages save(PersonImages entity) {
         open();
         try {
             ContentValues values = new ContentValues();
             values.put(COLUMN_ID, entity.getId());
             values.put(COLUMN_org, entity.getOrg());
-            values.put(COLUMN_firstName, entity.getFirstName());
-            values.put(COLUMN_emailAddress, entity.getEmailAddress());
-            values.put(COLUMN_lastName, entity.getLastName());
-            values.put(COLUMN_authvalue, entity.getAuthvalue());
-            values.put(COLUMN_enabled, entity.getEnabled());
-            values.put(COLUMN_accountNonExpired, entity.getAccountNonExpired());
-            values.put(COLUMN_credentialsNonExpired, entity.getCredentialsNonExpired());
-            values.put(COLUMN_accountNonLocked, entity.getAccountNonLocked());
-            values.put(COLUMN_state, entity.getState());
+            values.put(COLUMN_personId, entity.getPersonId());
+            values.put(COLUMN_url, entity.getUrl());
+            values.put(COLUMN_description, entity.getDescription());
+            values.put(COLUMN_mime, entity.getMime());
+            values.put(COLUMN_size, entity.getSize());
+            values.put(COLUMN_date, entity.getDate().toString());
             db.insert(TABLE_NAME,null,values);
         }catch (SQLiteConstraintException e){
             e.printStackTrace();
@@ -134,20 +121,17 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
     }
 
     @Override
-    public PersonImages update(Person entity) {
+    public PersonImages update(PersonImages entity) {
         open();
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, entity.getId());
         values.put(COLUMN_org, entity.getOrg());
-        values.put(COLUMN_firstName, entity.getFirstName());
-        values.put(COLUMN_emailAddress, entity.getEmailAddress());
-        values.put(COLUMN_lastName, entity.getLastName());
-        values.put(COLUMN_authvalue, entity.getAuthvalue());
-        values.put(COLUMN_enabled, entity.getEnabled());
-        values.put(COLUMN_accountNonExpired, entity.getAccountNonExpired());
-        values.put(COLUMN_credentialsNonExpired, entity.getCredentialsNonExpired());
-        values.put(COLUMN_accountNonLocked, entity.getAccountNonLocked());
-        values.put(COLUMN_state, entity.getState());
+        values.put(COLUMN_personId, entity.getPersonId());
+        values.put(COLUMN_url, entity.getUrl());
+        values.put(COLUMN_description, entity.getDescription());
+        values.put(COLUMN_mime, entity.getMime());
+        values.put(COLUMN_size, entity.getSize());
+        values.put(COLUMN_date, entity.getDate().toString());
         db.update(TABLE_NAME, values, COLUMN_ID + " =? ",
                 new String[]{String.valueOf(entity.getId())}
         );
@@ -155,7 +139,7 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
     }
 
     @Override
-    public PersonImages delete(Person entity) {
+    public PersonImages delete(PersonImages entity) {
         open();
         db.delete(TABLE_NAME,
                 COLUMN_ID + " =? ",
@@ -172,18 +156,17 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
         Cursor cursor = db.query(TABLE_NAME, null,null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
+                SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
                 PersonImages personImages = new PersonImages.Builder()
                         .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
                         .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
-                        .firstName(cursor.getString(cursor.getColumnIndex(COLUMN_firstName)))
-                        .emailAddress(cursor.getString(cursor.getColumnIndex(COLUMN_emailAddress)))
-                        .lastName(cursor.getString(cursor.getColumnIndex(COLUMN_lastName)))
-                        .authvalue(cursor.getString(cursor.getColumnIndex(COLUMN_authvalue)))
-                        .enabled(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_enabled))))
-                        .accountNonExpired(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_accountNonExpired))))
-                        .credentialsNonExpired(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_credentialsNonExpired))))
-                        .accountNonLocked(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(COLUMN_accountNonLocked))))
-                        .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
+                        .personId(cursor.getString(cursor.getColumnIndex(COLUMN_personId)))
+                        .url(cursor.getString(cursor.getColumnIndex(COLUMN_url)))
+                        .description(cursor.getString(cursor.getColumnIndex(COLUMN_description)))
+                        .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
+                        .size(cursor.getString(cursor.getColumnIndex(COLUMN_size)))
+                        .date(dateFormat.parse(cursor.getString(cursor
+                                .getColumnIndex(COLUMN_date))))
                         .build();
                 images.add(personImages);
             } while (cursor.moveToNext());

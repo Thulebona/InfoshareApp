@@ -40,7 +40,7 @@ public class PersonContactFactoryImpl extends SQLiteOpenHelper implements Person
             + COLUMN_DESCRIPTION + " TEXT  NOT NULL ;";
 
 
-    public PersonFactoryImpl(Context context) {
+    public PersonContactFactoryImpl(Context context) {
         super(context, DBConstants.DATABASE_NAME, null, DBConstants.DATABASE_VERSION);
     }
     public void open() throws SQLException {
