@@ -43,7 +43,7 @@ public class MediaRepositoryImpl  extends SQLiteOpenHelper implements MediaRepos
             + COLUMN_url + " TEXT  NOT NULL ,"
             + COLUMN_mime + " TEXT  NOT NULL ,"
             + COLUMN_state + " TEXT  NOT NULL ,"
-            + COLUMN_date + " TEXT  NOT NULL ;";
+            + COLUMN_date + " TEXT  NOT NULL );";
 
     public MediaRepositoryImpl(Context context) {
         super(context, DBConstants.DATABASE_NAME, null, DBConstants.DATABASE_VERSION);
@@ -73,6 +73,7 @@ public class MediaRepositoryImpl  extends SQLiteOpenHelper implements MediaRepos
 
     @Override
     public Media findById(String s) {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,

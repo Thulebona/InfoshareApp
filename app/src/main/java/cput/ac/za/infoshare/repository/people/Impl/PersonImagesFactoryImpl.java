@@ -55,7 +55,7 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
             + COLUMN_description + " TEXT NOT NULL , "
             + COLUMN_mime + " TEXT NOT NULL , "
             + COLUMN_size + " TEXT NOT NULL , "
-            + COLUMN_date + " TEXT NOT NULL;";
+            + COLUMN_date + " TEXT NOT NULL );";
 
 
     public PersonImagesFactoryImpl(Context context) {
@@ -64,6 +64,7 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
 
     @Override
     public PersonImages findById(String s) throws ParseException {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,

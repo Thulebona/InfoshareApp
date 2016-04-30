@@ -58,7 +58,7 @@ public class PersonDemographicsFactoryImpl extends SQLiteOpenHelper implements P
             + COLUMN_maritalStatusId + " TEXT NOT NULL , "
             + COLUMN_state + " TEXT NOT NULL , "
             + COLUMN_personRaceId + " TEXT NOT NULL , "
-            + COLUMN_numberOfDependencies + " INTEGER  NOT NULL ;";
+            + COLUMN_numberOfDependencies + " INTEGER  NOT NULL );";
 
 
     public PersonDemographicsFactoryImpl(Context context) {
@@ -67,6 +67,7 @@ public class PersonDemographicsFactoryImpl extends SQLiteOpenHelper implements P
 
     @Override
     public  PersonDemographics findById(String s) throws ParseException {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,

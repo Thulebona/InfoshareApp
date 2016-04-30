@@ -51,7 +51,7 @@ public class OrganisationRepositoryImpl extends SQLiteOpenHelper implements Orga
             + COLUMN_email + " TEXT NOT NULL , "
             + COLUMN_date + " TEXT NOT NULL , "
             + COLUMN_adminattached + " TEXT NOT NULL , "
-            + COLUMN_state + " TEXT  NOT NULL ;";
+            + COLUMN_state + " TEXT  NOT NULL );";
 
 
     public OrganisationRepositoryImpl(Context context) {
@@ -67,6 +67,7 @@ public class OrganisationRepositoryImpl extends SQLiteOpenHelper implements Orga
 
     @Override
     public Organisation findById(String s) throws ParseException {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,

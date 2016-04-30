@@ -38,7 +38,7 @@ public class PersonAddressFactoryImpl extends SQLiteOpenHelper implements Person
             + COLUMN_mime + " TEXT NOT NULL , "
             + COLUMN_size + " TEXT NOT NULL , "
             + COLUMN_date + " TEXT NOT NULL , "
-            + COLUMN_DESCRIPTION + " TEXT  NOT NULL ;";
+            + COLUMN_DESCRIPTION + " TEXT  NOT NULL );";
 
 
     public PersonAddressFactoryImpl(Context context) {

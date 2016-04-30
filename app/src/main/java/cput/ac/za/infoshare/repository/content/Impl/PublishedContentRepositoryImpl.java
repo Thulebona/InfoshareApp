@@ -51,7 +51,7 @@ public class PublishedContentRepositoryImpl  extends SQLiteOpenHelper implements
             + COLUMN_contentType + " TEXT NOT NULL , "
             + COLUMN_status + " TEXT NOT NULL , "
             + COLUMN_state + " TEXT NOT NULL , "
-            + COLUMN_org + " TEXT UNIQUE NOT NULL ;";
+            + COLUMN_org + " TEXT UNIQUE NOT NULL );";
 
     public PublishedContentRepositoryImpl(Context context) {
         super(context, DBConstants.DATABASE_NAME, null, DBConstants.DATABASE_VERSION);
@@ -81,6 +81,7 @@ public class PublishedContentRepositoryImpl  extends SQLiteOpenHelper implements
 
     @Override
     public PublishedContent findById(String s) {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,

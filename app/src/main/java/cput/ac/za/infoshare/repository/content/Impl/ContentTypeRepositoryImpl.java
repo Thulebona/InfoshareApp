@@ -33,7 +33,7 @@ public class ContentTypeRepositoryImpl  extends SQLiteOpenHelper implements Cont
             + TABLE_NAME + "("
             + COLUMN_ID + " TEXT  PRIMARY KEY , "
             + COLUMN_NAME + " TEXT UNIQUE NOT NULL , "
-            + COLUMN_DESCRIPTION + " TEXT  NOT NULL ;";
+            + COLUMN_DESCRIPTION + " TEXT  NOT NULL );";
 
     public ContentTypeRepositoryImpl(Context context) {
         super(context, DBConstants.DATABASE_NAME, null, DBConstants.DATABASE_VERSION);
@@ -63,6 +63,7 @@ public class ContentTypeRepositoryImpl  extends SQLiteOpenHelper implements Cont
 
     @Override
     public ContentType findById(String s) {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,

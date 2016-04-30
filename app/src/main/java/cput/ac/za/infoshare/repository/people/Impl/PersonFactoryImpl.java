@@ -64,7 +64,7 @@ public class PersonFactoryImpl extends SQLiteOpenHelper implements PersonFactory
             + COLUMN_accountNonExpired + " INTEGER NOT NULL , "
             + COLUMN_credentialsNonExpired + " INTEGER NOT NULL , "
             + COLUMN_accountNonLocked + " INTEGER NOT NULL , "
-            + COLUMN_state + " INTEGER  NOT NULL ;";
+            + COLUMN_state + " INTEGER  NOT NULL );";
 
 
     public PersonFactoryImpl(Context context) {
@@ -73,6 +73,7 @@ public class PersonFactoryImpl extends SQLiteOpenHelper implements PersonFactory
 
     @Override
     public Person findById(String s) throws ParseException {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,

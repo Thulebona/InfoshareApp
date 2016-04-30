@@ -51,7 +51,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
             + COLUMN_contentType + " TEXT NOT NULL , "
             + COLUMN_status + " TEXT NOT NULL , "
             + COLUMN_state + " TEXT NOT NULL , "
-            + COLUMN_org + " TEXT UNIQUE NOT NULL ;";
+            + COLUMN_org + " TEXT UNIQUE NOT NULL );";
 
 
     public RawContentRepositoryImpl(Context context) {
@@ -82,6 +82,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
 
     @Override
     public RawContent findById(String s) {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,
@@ -135,6 +136,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
 
     @Override
     public RawContent save(RawContent entity) {
+        open();
         try {
             ContentValues values = new ContentValues();
             values.put(COLUMN_ID, entity.getId());

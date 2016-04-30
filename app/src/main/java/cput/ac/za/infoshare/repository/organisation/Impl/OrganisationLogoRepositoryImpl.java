@@ -44,7 +44,7 @@ public class OrganisationLogoRepositoryImpl  extends SQLiteOpenHelper implements
             + COLUMN_mime + " TEXT NOT NULL , "
             + COLUMN_size + " TEXT NOT NULL , "
             + COLUMN_date + " TEXT NOT NULL , "
-            + COLUMN_DESCRIPTION + " TEXT  NOT NULL ;";
+            + COLUMN_DESCRIPTION + " TEXT  NOT NULL );";
 
 
     public OrganisationLogoRepositoryImpl(Context context) {
@@ -60,6 +60,7 @@ public class OrganisationLogoRepositoryImpl  extends SQLiteOpenHelper implements
 
     @Override
     public OrganisationLogo findById(String s) throws ParseException {
+        open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
                 TABLE_NAME,
