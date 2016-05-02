@@ -85,25 +85,13 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         open();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
-                TABLE_NAME,
-                new String[]{
-                        COLUMN_ID,
-                        COLUMN_dateCreated,
-                        COLUMN_creator,
-                        COLUMN_source,
-                        COLUMN_category,
-                        COLUMN_title,
-                        COLUMN_content,
-                        COLUMN_contentType,
-                        COLUMN_status,
-                        COLUMN_state,
-                        COLUMN_org},
-                COLUMN_ID + " = ? ",
-                new String[]{String.valueOf(s)},
+                TABLE_NAME, new String[]{"*"},COLUMN_ID + " = ?"
+                ,new String[]{s},
                 null,
                 null,
                 null,
                 null);
+        String cirorsor_vlue =cursor.getCount()+"thulebona hadebe";
         if (cursor.moveToFirst()) {
             SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
             RawContent rawContent;
@@ -125,12 +113,16 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
                 return rawContent;
             } catch (ParseException e) {
                 e.printStackTrace();
+                close();
                 return null;
             }
 
         } else {
+            close();
             return null;
+
         }
+
     }
 
 
@@ -154,7 +146,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         }catch (SQLiteConstraintException e){
             e.printStackTrace();
         }
-
+        close();
         return entity;
     }
 
@@ -176,6 +168,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         db.update(TABLE_NAME, values, COLUMN_ID + " =? ",
                 new String[]{String.valueOf(entity.getId())}
         );
+        close();
         return entity;
     }
 
@@ -185,6 +178,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         db.delete(TABLE_NAME,
                 COLUMN_ID + " =? ",
                 new String[]{String.valueOf(entity.getId())});
+        close();
         return entity;
     }
 
@@ -219,6 +213,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
                 }
             } while (cursor.moveToNext());
         }
+        close();
         return rawContents;
     }
 

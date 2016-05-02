@@ -12,11 +12,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import cput.ac.za.infoshare.AppConf.security.KeyGenerator;
+import cput.ac.za.infoshare.CustomAdapter.PublishedContentViewAdapter;
 import cput.ac.za.infoshare.R;
+import cput.ac.za.infoshare.domain.content.PublishedContent;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, AdapterView.OnItemClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +45,34 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        String cont = " Using any type of tobacco puts you on a collision course with cancer." +
+                " Smoking has been linked to various types of cancer — including cancer of the lung, bladder," +
+                " cervix and kidney. And chewing tobacco has been linked to cancer of the oral cavity and pancreas." +
+                " Even if you don't use tobacco, exposure to secondhand smoke might increase your risk of lung cancer." +
+                "Avoiding tobacco — or deciding to stop using it — is one of the most important health decisions you can make." +
+                " It's also an important part of cancer prevention. If you need help quitting tobacco," +
+                " ask your doctor about stop-smoking products and other strategies for quitting.";
+
+        List<PublishedContent> contents = new ArrayList<>();
+        contents.add(new PublishedContent.Builder()
+                .id(KeyGenerator.getEntityId())
+                .category("uncategorized")
+                .creator("thulebona Hadebe")
+                .source("mobile")
+                .category("uncategorized")
+                .content(cont)
+                .contentType("Text")
+                .org("CPUT")
+                .status("raw")
+                .title("HIV prevention")
+                .dateCreated(new Date()).build());
+        PublishedContentViewAdapter adapter = new PublishedContentViewAdapter(this,contents);
+        ListView contentListView = (ListView) findViewById(R.id.content_list_view);
+        contentListView.setSelector(R.color.colorPrimary);
+        contentListView.setAdapter(adapter);
+        contentListView.setOnItemClickListener(this);
+
     }
 
     @Override
@@ -98,4 +135,8 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
 }
