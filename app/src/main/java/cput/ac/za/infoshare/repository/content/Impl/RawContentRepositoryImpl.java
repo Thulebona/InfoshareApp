@@ -9,11 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import cput.ac.za.infoshare.AppConf.Util.AppUtil;
 import cput.ac.za.infoshare.AppConf.databasese.DBConstants;
 import cput.ac.za.infoshare.domain.content.RawContent;
 import cput.ac.za.infoshare.repository.content.RawContentRepository;
@@ -42,7 +41,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
     private static final String DATABASE_CREATE = " CREATE TABLE "
             + TABLE_NAME + "("
             + COLUMN_ID + " TEXT  PRIMARY KEY , "
-            + COLUMN_dateCreated + " TEXT  NOT NULL , "
+            + COLUMN_dateCreated + " TEXT NOT NULL , "
             + COLUMN_creator + " TEXT NOT NULL , "
             + COLUMN_source + " TEXT NOT NULL , "
             + COLUMN_category + " TEXT NOT NULL , "
@@ -81,50 +80,46 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
     }
 
     @Override
-    public RawContent findById(String s) {
-        open();
+    public RawContent findById(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(
-                TABLE_NAME, new String[]{"*"},COLUMN_ID + " = ?"
-                ,new String[]{s},
+                TABLE_NAME, new String[]{
+                        COLUMN_ID,
+                        COLUMN_creator,
+                        COLUMN_dateCreated,
+                        COLUMN_source,
+                        COLUMN_category,
+                        COLUMN_title,
+                        COLUMN_content,
+                        COLUMN_contentType,
+                        COLUMN_status,
+                        COLUMN_state,
+                        COLUMN_org,
+                },COLUMN_ID + " =? "
+                ,new String[]{String.valueOf(id)},
                 null,
                 null,
                 null,
                 null);
-        String cirorsor_vlue =cursor.getCount()+"thulebona hadebe";
         if (cursor.moveToFirst()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
-            RawContent rawContent;
-            try {
-                rawContent = new RawContent.Builder()
-                        .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
-                        .dateCreated(dateFormat.parse(cursor.getString(cursor
-                                .getColumnIndex(COLUMN_dateCreated))))
-                        .creator(cursor.getString(cursor.getColumnIndex(COLUMN_creator)))
-                        .source(cursor.getString(cursor.getColumnIndex(COLUMN_source)))
-                        .category(cursor.getString(cursor.getColumnIndex(COLUMN_category)))
-                        .title(cursor.getString(cursor.getColumnIndex(COLUMN_title)))
-                        .content(cursor.getString(cursor.getColumnIndex(COLUMN_content)))
-                        .contentType(cursor.getString(cursor.getColumnIndex(COLUMN_contentType)))
-                        .status(cursor.getString(cursor.getColumnIndex(COLUMN_status)))
-                        .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
-                        .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
-                        .build();
-                return rawContent;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                close();
-                return null;
-            }
-
+            return new RawContent.Builder()
+                    .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
+                    .dateCreated(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_dateCreated))))
+                    .creator(cursor.getString(cursor.getColumnIndex(COLUMN_creator)))
+                    .source(cursor.getString(cursor.getColumnIndex(COLUMN_source)))
+                    .category(cursor.getString(cursor.getColumnIndex(COLUMN_category)))
+                    .title(cursor.getString(cursor.getColumnIndex(COLUMN_title)))
+                    .content(cursor.getString(cursor.getColumnIndex(COLUMN_content)))
+                    .contentType(cursor.getString(cursor.getColumnIndex(COLUMN_contentType)))
+                    .status(cursor.getString(cursor.getColumnIndex(COLUMN_status)))
+                    .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
+                    .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
+                    .build();
         } else {
-            close();
             return null;
-
         }
 
     }
-
 
     @Override
     public RawContent save(RawContent entity) {
@@ -132,8 +127,8 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         try {
             ContentValues values = new ContentValues();
             values.put(COLUMN_ID, entity.getId());
-            values.put(COLUMN_dateCreated, entity.getDateCreated().toString());
             values.put(COLUMN_creator, entity.getCreator());
+            values.put(COLUMN_dateCreated, entity.getDateCreated().toString());
             values.put(COLUMN_source, entity.getSource());
             values.put(COLUMN_category, entity.getCategory());
             values.put(COLUMN_title, entity.getTitle());
@@ -146,7 +141,6 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         }catch (SQLiteConstraintException e){
             e.printStackTrace();
         }
-        close();
         return entity;
     }
 
@@ -155,8 +149,8 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         open();
         ContentValues values = new ContentValues();
         values.put(COLUMN_ID, entity.getId());
-        values.put(COLUMN_dateCreated, entity.getDateCreated().toString());
         values.put(COLUMN_creator, entity.getCreator());
+        values.put(COLUMN_dateCreated, entity.getDateCreated().toString());
         values.put(COLUMN_source, entity.getSource());
         values.put(COLUMN_category, entity.getCategory());
         values.put(COLUMN_title, entity.getTitle());
@@ -168,7 +162,6 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         db.update(TABLE_NAME, values, COLUMN_ID + " =? ",
                 new String[]{String.valueOf(entity.getId())}
         );
-        close();
         return entity;
     }
 
@@ -178,7 +171,6 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         db.delete(TABLE_NAME,
                 COLUMN_ID + " =? ",
                 new String[]{String.valueOf(entity.getId())});
-        close();
         return entity;
     }
 
@@ -190,13 +182,9 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
         Cursor cursor = db.query(TABLE_NAME, null,null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
-                SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
-                RawContent rawContent = null;
-                try {
-                    rawContent = new RawContent.Builder()
+                RawContent rawContent =new RawContent.Builder()
                             .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
-                            .dateCreated(dateFormat.parse(cursor.getString(cursor
-                                    .getColumnIndex(COLUMN_dateCreated))))
+                            .dateCreated(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_dateCreated))))
                             .creator(cursor.getString(cursor.getColumnIndex(COLUMN_creator)))
                             .source(cursor.getString(cursor.getColumnIndex(COLUMN_source)))
                             .category(cursor.getString(cursor.getColumnIndex(COLUMN_category)))
@@ -208,12 +196,9 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
                             .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
                             .build();
                     rawContents.add(rawContent);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+
             } while (cursor.moveToNext());
         }
-        close();
         return rawContents;
     }
 

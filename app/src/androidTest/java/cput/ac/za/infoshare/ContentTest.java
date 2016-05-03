@@ -44,15 +44,15 @@ public class ContentTest extends AndroidTestCase {
         id = insertedEntity.getId();
         Assert.assertNotNull(TAG + " CREATE", insertedEntity);
 
-        //Update
+        //read
 
-        RawContent update = repo.update(new RawContent.Builder().copy(createEntity).contentType("Text/Images").build());
-        RawContent contentUpdate = repo.findById(update.getId());
-        Assert.assertEquals("Text/Images",contentUpdate.getContentType());
-
+        RawContent read = repo.findById(id);
+        Assert.assertNotNull(TAG + " CREATE", read);
         //ReadALL
         Assert.assertTrue(!repo.findAll().isEmpty());
-
+        //update
+        RawContent update = repo.update(new RawContent.Builder().copy(createEntity).contentType("Text/Images").build());
+        Assert.assertEquals("Text/Images",update.getContentType());
 
 
     }
