@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="@drawable/side_nav_bar"
+    >
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/user_pic"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="30dp"
+        android:contentDescription="@string/profilepic" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="USER NAME"
+        android:id="@+id/user_namelLbl"
+        android:layout_below="@+id/user_pic"
+        android:layout_alignLeft="@+id/user_pic"
+        android:layout_alignStart="@+id/user_pic"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="userEmaul@email.com"
+        android:id="@+id/user_emailLBL"
+        android:layout_below="@+id/user_namelLbl"
+        android:layout_alignLeft="@+id/user_namelLbl"
+        android:layout_alignStart="@+id/user_namelLbl"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+
+</RelativeLayout>

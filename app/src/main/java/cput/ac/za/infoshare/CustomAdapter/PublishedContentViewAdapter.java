@@ -6,7 +6,6 @@ package cput.ac.za.infoshare.CustomAdapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +27,6 @@ public class PublishedContentViewAdapter extends BaseAdapter
 
     public PublishedContentViewAdapter(Activity context, List<PublishedContent> items) {
         super();
-
         this.items = items;
         this.inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -68,12 +66,7 @@ public class PublishedContentViewAdapter extends BaseAdapter
         cont_creator.setText(item.getCreator());
         cont_preview.setText(item.getContent().substring(0,45));
         cont_dateCreated.setText(format.format(item.getDateCreated()));
-        if (position % 2 == 0) {
-            view.setBackgroundColor(Color.parseColor("#dedcdc"));
-        }
-        else if (position % 2 == 1) {
-            view.setBackgroundColor(Color.parseColor("#ffffff"));
-        }
+
 
 
             return view;
