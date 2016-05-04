@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/view_selector"
+    android:layout_height="57dp"
     >
 
     <TextView
@@ -11,6 +10,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/content_title"
+        android:layout_marginLeft="3dp"
         android:id="@+id/cont_Title"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -33,6 +33,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/creator"
+        android:layout_marginLeft="3dp"
         android:id="@+id/cont_creator"
         android:layout_below="@+id/cont_Title"
         android:layout_alignParentLeft="true"
@@ -45,6 +46,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/preview"
+        android:layout_marginLeft="2.5dp"
+
         android:id="@+id/cont_preveiw"
         android:layout_below="@+id/cont_creator"
         android:layout_alignParentLeft="true"

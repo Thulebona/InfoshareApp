@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +26,7 @@ import cput.ac.za.infoshare.domain.content.PublishedContent;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContentFragment extends Fragment implements FloatingActionButton.OnClickListener, AdapterView.OnItemClickListener {
+public class ContentFragment extends Fragment implements AdapterView.OnItemClickListener {
 
 
     public ContentFragment() {
@@ -42,7 +44,15 @@ public class ContentFragment extends Fragment implements FloatingActionButton.On
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_content, container, false);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(this);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.main_container,new CreateContentFragment());
+                fragmentTransaction.commit();
+            }
+        });
 
         //
         PublishedContentViewAdapter adapter = new PublishedContentViewAdapter(this.getActivity(),testTable());
@@ -63,11 +73,6 @@ public class ContentFragment extends Fragment implements FloatingActionButton.On
         super.onDetach();
     }
 
-    @Override
-    public void onClick(View v) {
-        Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

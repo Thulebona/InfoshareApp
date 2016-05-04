@@ -64,11 +64,8 @@ public class PublishedContentViewAdapter extends BaseAdapter
         SimpleDateFormat format = new SimpleDateFormat("dd-MMMM-yyyy");
         cont_Title.setText(item.getTitle().toUpperCase());
         cont_creator.setText(item.getCreator());
-        cont_preview.setText(item.getContent().substring(0,45));
+        cont_preview.setText(item.getContent().substring(0,48)+"....");
         cont_dateCreated.setText(format.format(item.getDateCreated()));
-
-
-
-            return view;
+        return view;
     }
 }
