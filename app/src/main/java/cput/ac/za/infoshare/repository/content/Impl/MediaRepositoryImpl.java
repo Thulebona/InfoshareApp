@@ -9,11 +9,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import cput.ac.za.infoshare.AppConf.Util.AppUtil;
 import cput.ac.za.infoshare.AppConf.databasese.DBConstants;
 import cput.ac.za.infoshare.domain.content.Media;
 import cput.ac.za.infoshare.repository.content.MediaRepository;
@@ -92,22 +91,16 @@ public class MediaRepositoryImpl  extends SQLiteOpenHelper implements MediaRepos
                 null,
                 null);
         if (cursor.moveToFirst()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            Media media = null;
-            try {
-                media = new Media.Builder()
-                        .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
-                        .contentid(cursor.getString(cursor.getColumnIndex(COLUMN_contentId)))
-                        .url(cursor.getString(cursor.getColumnIndex(COLUMN_url)))
-                        .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
-                        .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
-                        .description(cursor.getString(cursor.getColumnIndex(COLUMN_description)))
-                        .date(dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
-                        .build();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            return media;
+            return new Media.Builder()
+                    .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
+                    .contentid(cursor.getString(cursor.getColumnIndex(COLUMN_contentId)))
+                    .url(cursor.getString(cursor.getColumnIndex(COLUMN_url)))
+                    .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
+                    .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
+                    .description(cursor.getString(cursor.getColumnIndex(COLUMN_description)))
+                    .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
+                    .build();
+
         } else {
             return null;
         }
@@ -161,28 +154,21 @@ public class MediaRepositoryImpl  extends SQLiteOpenHelper implements MediaRepos
     @Override
     public Set<Media> findAll() {
         SQLiteDatabase db = this.getReadableDatabase();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         Set<Media> medias = new HashSet<>();
         open();
         Cursor cursor = db.query(TABLE_NAME, null,null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
-                final Media media;
-                try {
-                    media = new Media.Builder()
+                final Media media = new Media.Builder()
                             .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
                             .contentid(cursor.getString(cursor.getColumnIndex(COLUMN_contentId)))
                             .url(cursor.getString(cursor.getColumnIndex(COLUMN_url)))
                             .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
                             .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
                             .description(cursor.getString(cursor.getColumnIndex(COLUMN_description)))
-                            .date(dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
+                            .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                             .build();
                     medias.add(media);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
             } while (cursor.moveToNext());
         }
         return medias;

@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import cput.ac.za.infoshare.AppConf.Util.AppUtil;
 import cput.ac.za.infoshare.AppConf.databasese.DBConstants;
 import cput.ac.za.infoshare.domain.person.PersonImages;
 import cput.ac.za.infoshare.repository.people.PersonImagesFactory;
@@ -84,7 +85,6 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
                 null,
                 null);
         if (cursor.moveToFirst()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
             return new PersonImages.Builder()
                     .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
                     .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
@@ -93,8 +93,7 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
                     .description(cursor.getString(cursor.getColumnIndex(COLUMN_description)))
                     .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
                     .size(cursor.getString(cursor.getColumnIndex(COLUMN_size)))
-                    .date(dateFormat.parse(cursor.getString(cursor
-                            .getColumnIndex(COLUMN_date))))
+                    .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                     .build();
         } else {
             return null;
@@ -166,8 +165,7 @@ public class PersonImagesFactoryImpl extends SQLiteOpenHelper implements PersonI
                         .description(cursor.getString(cursor.getColumnIndex(COLUMN_description)))
                         .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
                         .size(cursor.getString(cursor.getColumnIndex(COLUMN_size)))
-                        .date(dateFormat.parse(cursor.getString(cursor
-                                .getColumnIndex(COLUMN_date))))
+                        .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                         .build();
                 images.add(personImages);
             } while (cursor.moveToNext());

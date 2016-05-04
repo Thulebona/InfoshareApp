@@ -10,10 +10,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import cput.ac.za.infoshare.AppConf.Util.AppUtil;
 import cput.ac.za.infoshare.AppConf.databasese.DBConstants;
 import cput.ac.za.infoshare.domain.organisation.OrganisationLogo;
 import cput.ac.za.infoshare.repository.organisation.OrganisationLogoRepository;
@@ -79,18 +79,15 @@ public class OrganisationLogoRepositoryImpl  extends SQLiteOpenHelper implements
                 null,
                 null);
         if (cursor.moveToFirst()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
-            final OrganisationLogo organisationLogo = new OrganisationLogo.Builder()
+            return new OrganisationLogo.Builder()
                     .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
                     .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
                     .url(cursor.getString(cursor.getColumnIndex(COLUMN_url)))
                     .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
                     .size(cursor.getString(cursor.getColumnIndex(COLUMN_size)))
-                    .date(dateFormat.parse(cursor.getString(cursor
-                            .getColumnIndex(COLUMN_date))))
+                    .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                     .description(cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION)))
                     .build();
-            return organisationLogo;
         } else {
             return null;
         }
@@ -151,15 +148,13 @@ public class OrganisationLogoRepositoryImpl  extends SQLiteOpenHelper implements
         Cursor cursor = db.query(TABLE_NAME, null,null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
-                SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
                 final OrganisationLogo organisationLogo = new OrganisationLogo.Builder()
                         .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
                         .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
                         .url(cursor.getString(cursor.getColumnIndex(COLUMN_url)))
                         .mime(cursor.getString(cursor.getColumnIndex(COLUMN_mime)))
                         .size(cursor.getString(cursor.getColumnIndex(COLUMN_size)))
-                        .date(dateFormat.parse(cursor.getString(cursor
-                                .getColumnIndex(COLUMN_date))))
+                        .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                         .description(cursor.getString(cursor.getColumnIndex(COLUMN_DESCRIPTION)))
                         .build();
                 organisationLogos.add(organisationLogo);

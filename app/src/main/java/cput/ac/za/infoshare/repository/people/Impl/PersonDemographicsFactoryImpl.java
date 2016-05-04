@@ -10,10 +10,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import cput.ac.za.infoshare.AppConf.Util.AppUtil;
 import cput.ac.za.infoshare.AppConf.databasese.DBConstants;
 import cput.ac.za.infoshare.domain.person.PersonDemographics;
 import cput.ac.za.infoshare.repository.people.PersonDemographicsFactory;
@@ -88,14 +88,13 @@ public class PersonDemographicsFactoryImpl extends SQLiteOpenHelper implements P
                 null,
                 null);
         if (cursor.moveToFirst()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
             return new  PersonDemographics.Builder()
                     .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
                     .personId(cursor.getString(cursor.getColumnIndex(COLUMN_personId)))
                     .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
                     .genderId(cursor.getString(cursor.getColumnIndex(COLUMN_genderId)))
-                    .dateOfBirth(dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_dateOfBirth))))
-                    .date(dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
+                    .dateOfBirth(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_dateOfBirth))))
+                    .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                     .maritalstatusid(cursor.getString(cursor.getColumnIndex(COLUMN_maritalStatusId)))
                     .personraceid(cursor.getString(cursor.getColumnIndex(COLUMN_personRaceId)))
                     .numberofdependencies(cursor.getInt(cursor.getColumnIndex(COLUMN_numberOfDependencies)))
@@ -166,14 +165,13 @@ public class PersonDemographicsFactoryImpl extends SQLiteOpenHelper implements P
         Cursor cursor = db.query(TABLE_NAME, null,null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
-                 SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
                 PersonDemographics demographics = new  PersonDemographics.Builder()
                         .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
                         .personId(cursor.getString(cursor.getColumnIndex(COLUMN_personId)))
                         .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
                         .genderId(cursor.getString(cursor.getColumnIndex(COLUMN_genderId)))
-                        .dateOfBirth(dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_dateOfBirth))))
-                        .date(dateFormat.parse(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
+                        .dateOfBirth(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_dateOfBirth))))
+                        .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                         .maritalstatusid(cursor.getString(cursor.getColumnIndex(COLUMN_maritalStatusId)))
                         .personraceid(cursor.getString(cursor.getColumnIndex(COLUMN_personRaceId)))
                         .numberofdependencies(cursor.getInt(cursor.getColumnIndex(COLUMN_numberOfDependencies)))

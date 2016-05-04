@@ -10,12 +10,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import cput.ac.za.infoshare.AppConf.Util.AppUtil;
 import cput.ac.za.infoshare.AppConf.databasese.DBConstants;
 import cput.ac.za.infoshare.domain.organisation.Organisation;
 import cput.ac.za.infoshare.repository.organisation.OrganisationRepository;
@@ -87,7 +87,6 @@ public class OrganisationRepositoryImpl extends SQLiteOpenHelper implements Orga
                 null,
                 null);
         if (cursor.moveToFirst()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
             Map<String, String> details = new HashMap<>();
             details.put("address",cursor.getString(cursor.getColumnIndex(COLUMN_address)));
             details.put("contactphone", cursor.getString(cursor.getColumnIndex(COLUMN_contactphone)));
@@ -99,8 +98,7 @@ public class OrganisationRepositoryImpl extends SQLiteOpenHelper implements Orga
                     .details(details)
                     .adminattached(cursor.getString(cursor.getColumnIndex(COLUMN_adminattached)))
                     .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
-                    .date(dateFormat.parse(cursor.getString(cursor
-                            .getColumnIndex(COLUMN_date))))
+                    .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                     .build();
             return organisation;
         } else {
@@ -165,7 +163,6 @@ public class OrganisationRepositoryImpl extends SQLiteOpenHelper implements Orga
         Cursor cursor = db.query(TABLE_NAME, null,null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
-                SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
                 Map<String, String> details = new HashMap<>();
                 details.put("address",cursor.getString(cursor.getColumnIndex(COLUMN_address)));
                 details.put("contactphone", cursor.getString(cursor.getColumnIndex(COLUMN_contactphone)));
@@ -177,8 +174,7 @@ public class OrganisationRepositoryImpl extends SQLiteOpenHelper implements Orga
                         .details(details)
                         .adminattached(cursor.getString(cursor.getColumnIndex(COLUMN_adminattached)))
                         .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
-                        .date(dateFormat.parse(cursor.getString(cursor
-                                .getColumnIndex(COLUMN_date))))
+                        .date(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_date))))
                         .build();
                 organisations.add(organisation);
             } while (cursor.moveToNext());

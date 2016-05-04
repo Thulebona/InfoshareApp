@@ -50,7 +50,7 @@ public class RawContentRepositoryImpl  extends SQLiteOpenHelper implements RawCo
             + COLUMN_contentType + " TEXT NOT NULL , "
             + COLUMN_status + " TEXT NOT NULL , "
             + COLUMN_state + " TEXT NOT NULL , "
-            + COLUMN_org + " TEXT UNIQUE NOT NULL );";
+            + COLUMN_org + " TEXT NOT NULL );";
 
 
     public RawContentRepositoryImpl(Context context) {

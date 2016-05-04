@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 
+import cput.ac.za.infoshare.AppConf.Util.AppUtil;
 import cput.ac.za.infoshare.AppConf.databasese.DBConstants;
 import cput.ac.za.infoshare.domain.content.PublishedContent;
 import cput.ac.za.infoshare.domain.content.RawContent;
@@ -104,29 +105,19 @@ public class PublishedContentRepositoryImpl  extends SQLiteOpenHelper implements
                 null,
                 null);
         if (cursor.moveToFirst()) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
-             PublishedContent publishedContent;
-            try {
-                publishedContent = new PublishedContent.Builder()
-                        .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
-                        .dateCreated(dateFormat.parse(cursor.getString(cursor
-                                .getColumnIndex(COLUMN_dateCreated))))
-                        .creator(cursor.getString(cursor.getColumnIndex(COLUMN_creator)))
-                        .source(cursor.getString(cursor.getColumnIndex(COLUMN_source)))
-                        .category(cursor.getString(cursor.getColumnIndex(COLUMN_category)))
-                        .title(cursor.getString(cursor.getColumnIndex(COLUMN_title)))
-                        .content(cursor.getString(cursor.getColumnIndex(COLUMN_content)))
-                        .contentType(cursor.getString(cursor.getColumnIndex(COLUMN_contentType)))
-                        .status(cursor.getString(cursor.getColumnIndex(COLUMN_status)))
-                        .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
-                        .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
-                        .build();
-                return publishedContent;
-            } catch (ParseException e) {
-                e.printStackTrace();
-                return null;
-            }
-
+            return new PublishedContent.Builder()
+                    .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
+                    .dateCreated(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_dateCreated))))
+                    .creator(cursor.getString(cursor.getColumnIndex(COLUMN_creator)))
+                    .source(cursor.getString(cursor.getColumnIndex(COLUMN_source)))
+                    .category(cursor.getString(cursor.getColumnIndex(COLUMN_category)))
+                    .title(cursor.getString(cursor.getColumnIndex(COLUMN_title)))
+                    .content(cursor.getString(cursor.getColumnIndex(COLUMN_content)))
+                    .contentType(cursor.getString(cursor.getColumnIndex(COLUMN_contentType)))
+                    .status(cursor.getString(cursor.getColumnIndex(COLUMN_status)))
+                    .state(cursor.getString(cursor.getColumnIndex(COLUMN_state)))
+                    .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
+                    .build();
         } else {
             return null;
         }
@@ -194,13 +185,10 @@ public class PublishedContentRepositoryImpl  extends SQLiteOpenHelper implements
         Cursor cursor = db.query(TABLE_NAME, null,null,null,null,null,null);
         if (cursor.moveToFirst()) {
             do {
-             SimpleDateFormat dateFormat = new SimpleDateFormat(  "MM/dd/yyyy HH:mm:ss");
-                PublishedContent publishedContent = null;
-                try {
+                PublishedContent
                     publishedContent = new PublishedContent.Builder()
                                .id(cursor.getString(cursor.getColumnIndex(COLUMN_ID)))
-                               .dateCreated(dateFormat.parse(cursor.getString(cursor
-                                       .getColumnIndex(COLUMN_dateCreated))))
+                               .dateCreated(AppUtil.getDate(cursor.getString(cursor.getColumnIndex(COLUMN_dateCreated))))
                                .creator(cursor.getString(cursor.getColumnIndex(COLUMN_creator)))
                                .source(cursor.getString(cursor.getColumnIndex(COLUMN_source)))
                                .category(cursor.getString(cursor.getColumnIndex(COLUMN_category)))
@@ -212,9 +200,7 @@ public class PublishedContentRepositoryImpl  extends SQLiteOpenHelper implements
                                .org(cursor.getString(cursor.getColumnIndex(COLUMN_org)))
                                .build();
                     publishedContents.add(publishedContent);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+
             } while (cursor.moveToNext());
         }
         return publishedContents;
